@@ -1,3 +1,5 @@
+import React from "react";
+
 type CounterBoxProps = Readonly<{
   number: number;
   legends: string;

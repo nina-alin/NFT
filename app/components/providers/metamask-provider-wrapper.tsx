@@ -1,6 +1,7 @@
 "use client";
 
 import { MetaMaskProvider } from "@metamask/sdk-react";
+import React from "react";
 
 type MetaMaskProviderWrapperProps = Readonly<{
   children: React.ReactNode;

@@ -1,3 +1,5 @@
+import React from "react";
+
 type DetailsEntryProps = Readonly<{
   icon: JSX.Element;
   label: string;

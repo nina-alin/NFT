@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Main from "../components/main-page/main";
+import getContract from "../utils/get-contract";
 import { cardMock } from "../components/mocks/card.mock";
 
 const HomePage = () => {
@@ -16,11 +17,26 @@ const HomePage = () => {
     image: card.image,
   }));
 
+  useEffect(() => {
+    (async () => {
+      const contract = await getContract();
+
+      console.log("contract", contract);
+
+      try {
+        const response = await contract.getAllTokens();
+        console.log("ici", response);
+      } catch (e) {
+        console.log("Error:", e);
+      }
+    })();
+  }, []);
+
   return (
     <Main
       cardsIdsAndImages={cardsIdsAndImages}
-      onSwipeCard={onSwipeCard}
       selectedCard={selectedCard}
+      onSwipeCard={onSwipeCard}
     />
   );
 };

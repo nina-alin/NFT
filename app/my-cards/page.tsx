@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import Main from "../components/main-page/main";
 import { cardMock } from "../components/mocks/card.mock";
 

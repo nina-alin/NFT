@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import Image from "next/image";
 import { MdArrowOutward } from "react-icons/md";
 import CounterBox from "./components/main-page/counter-box";

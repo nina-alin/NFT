@@ -5,21 +5,26 @@ import Link from "next/link";
 import LinkButtons from "./link-buttons";
 import { usePathname, useRouter } from "next/navigation";
 import { useSDK } from "@metamask/sdk-react";
+import React, { useState } from "react";
 
 const Navbar = () => {
+  const { sdk, connected, connecting, balance } = useSDK();
   const pathname = usePathname();
-  const router = useRouter();
 
-  const { sdk, connected, balance } = useSDK();
+  const [account, setAccount] = useState<string>();
 
   const connect = async () => {
     try {
-      await sdk?.connect();
-      router.push("/home");
+      const accounts = await sdk?.connect();
+      setAccount(accounts?.[0]);
     } catch (err) {
       console.warn(`failed to connect..`, err);
     }
   };
+
+  if (connecting) {
+    return <p>Loading...</p>;
+  }
 
   const isHome = pathname === "/";
 
@@ -38,12 +43,18 @@ const Navbar = () => {
         </div>
       ) : null}
       <div className="flex gap-4 text-2xl items-center">
-        <button
-          className="rounded-full px-6 py-3 bg-secondary text-white text-lg hover:bg-white hover:text-secondary transition-colors"
-          onClick={connect}
-        >
-          {connected ? balance : "Connect your wallet"}
-        </button>
+        {!connected && !account ? (
+          <button
+            className="rounded-full px-6 py-3 bg-secondary text-white text-lg hover:bg-white hover:text-secondary transition-colors"
+            onClick={connect}
+          >
+            Connect your wallet
+          </button>
+        ) : (
+          <div className="rounded-full px-6 py-3 bg-secondary text-white text-lg">
+            {balance}
+          </div>
+        )}
       </div>
     </div>
   );

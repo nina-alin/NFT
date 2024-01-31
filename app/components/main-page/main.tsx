@@ -1,3 +1,5 @@
+"use client";
+
 import CounterBox from "./counter-box";
 import DetailsEntry from "./details-entry";
 import TwoDots from "./two-dots";
@@ -11,6 +13,7 @@ import { MdCenterFocusWeak } from "react-icons/md";
 import { GiCrystalGrowth } from "react-icons/gi";
 import Graph from "./graph";
 import { Card } from "../types/card";
+import React, { useState } from "react";
 
 type MainProps = {
   cardsIdsAndImages: { id: number; image: string }[];
@@ -18,14 +21,32 @@ type MainProps = {
   selectedCard: Card;
 };
 
+const timer = (date: string) => {
+  const timeStampDate = new Date(date).getTime();
+  const now = new Date().getTime();
+  const difference = timeStampDate - now;
+
+  const seconds = Math.floor((difference / 1000) % 60);
+  const minutes = Math.floor((difference / (1000 * 60)) % 60);
+  const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+
+  return {
+    seconds,
+    minutes,
+    hours,
+  };
+};
+
 const Main = ({ cardsIdsAndImages, onSwipeCard, selectedCard }: MainProps) => {
-  const dateTimeStamp = Date.parse(selectedCard.limitDate);
+  const [dateTimeStamp, setDateTimeStamp] = useState<{
+    hours: number;
+    minutes: number;
+    seconds: number;
+  } | null>(null);
 
-  const date = new Date(dateTimeStamp * 1000);
-
-  const hours = date.getHours();
-  const minutes = "0" + date.getMinutes();
-  const seconds = "0" + date.getSeconds();
+  setTimeout(() => {
+    setDateTimeStamp(timer(selectedCard.limitDate));
+  }, 1000);
 
   return (
     <main className="mt-20">
@@ -43,11 +64,11 @@ const Main = ({ cardsIdsAndImages, onSwipeCard, selectedCard }: MainProps) => {
         </div>
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-center gap-3">
-            <CounterBox number={hours} legends="Hours" />
+            <CounterBox number={dateTimeStamp?.hours} legends="Hours" />
             <TwoDots />
-            <CounterBox number={parseInt(minutes.substr(-2))} legends="Min" />
+            <CounterBox number={dateTimeStamp?.minutes} legends="Min" />
             <TwoDots />
-            <CounterBox number={parseInt(seconds.substr(-2))} legends="Sec" />
+            <CounterBox number={dateTimeStamp?.seconds} legends="Sec" />
           </div>
           <div className="col-span-6 rounded-3xl bg-white shadow-lg flex justify-center items-center px-10 py-4 gap-5 mx-7">
             <Image

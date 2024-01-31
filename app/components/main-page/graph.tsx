@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useMemo } from "react";
+import React, { useMemo } from "react";
 import { AxisOptions, Chart } from "react-charts";
 
 type GraphProps = {

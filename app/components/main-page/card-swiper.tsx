@@ -9,6 +9,7 @@ import "swiper/css/effect-cards";
 
 // import required modules
 import { EffectCards } from "swiper/modules";
+import React from "react";
 
 type CardSwiperProps = {
   cardsIdsAndImages: { id: number; image: string }[];

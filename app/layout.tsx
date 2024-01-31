@@ -3,6 +3,7 @@ import { Rajdhani } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/navbar/navbar";
 import MetaMaskProviderWrapper from "./components/providers/metamask-provider-wrapper";
+import React from "react";
 
 const rajdhani = Rajdhani({
   subsets: ["latin"],
