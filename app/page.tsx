@@ -1,13 +1,56 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { MdArrowOutward } from "react-icons/md";
 import CounterBox from "./components/main-page/counter-box";
 import TwoDots from "./components/main-page/two-dots";
 import Link from "next/link";
+import getContract from "./utils/get-contract";
+import { Card } from "./components/types/card";
+import { timer } from "./components/main-page/main";
 
 export default function Home() {
+  const [randomCard, setRandomCard] = useState<Card & { id: string }>();
+  const [dateTimeStamp, setDateTimeStamp] = useState<{
+    hours: number;
+    minutes: number;
+    seconds: number;
+  } | null>(null);
+
+  setTimeout(() => {
+    if (randomCard) {
+      setDateTimeStamp(timer(randomCard.closureDate));
+    }
+  }, 1000);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const contract = await getContract();
+
+        const ids: string[] = await contract?.getAllTokens();
+
+        const randomId = ids[Math.floor(Math.random() * ids.length)];
+
+        const card = await fetch(
+          `${process.env.NEXT_PUBLIC_IFPS_API_URL}/${randomId}`,
+          {
+            method: "GET",
+          }
+        );
+
+        const cardAsJson = await card.json();
+
+        setRandomCard({ id: randomId, ...cardAsJson });
+
+        console.log(cardAsJson);
+      } catch (error) {
+        console.error(error);
+      }
+    })();
+  }, []);
+
   return (
     <main className="flex flex-col items-center mt-20 gap-28">
       <h1 className="text-7xl font-extrabold uppercase text-center tracking-wider">
@@ -15,7 +58,7 @@ export default function Home() {
         <br />
         Super rare Palamons NFTS
       </h1>
-      <div className="flex justify-between items-center gap-36">
+      <div className="flex justify-between items-center gap-36 flex-wrap">
         <div className="flex flex-col gap-16 rounded-3xl bg-white shadow-lg p-9">
           <p className="text-xl font-medium">
             An Expansive Place to Collect, Exchange, <br />
@@ -81,30 +124,33 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="flex justify-between items-center gap-20">
-        <div className="bg-red-700 h-[50vh] w-80 rounded-2xl border-black border-4">
-          Slide 1
-        </div>
-        <div className="flex flex-col gap-10">
-          <div className="flex items-center justify-center gap-3">
-            <CounterBox number={11} legends="Hours" />
-            <TwoDots />
-            <CounterBox number={73} legends="Min" />
-            <TwoDots />
-            <CounterBox number={46} legends="Sec" />
+      {randomCard ? (
+        <div className="flex justify-between items-center gap-20">
+          <Image
+            src={`${
+              process.env.NEXT_PUBLIC_IFPS_BASE_URL
+            }/${randomCard.image.slice(7)}`}
+            alt="pokemon"
+            width={300}
+            height={300}
+          />
+          <div className="flex flex-col gap-10">
+            <div className="flex items-center justify-center gap-3">
+              <CounterBox number={dateTimeStamp?.hours} legends="Hours" />
+              <TwoDots />
+              <CounterBox number={dateTimeStamp?.minutes} legends="Min" />
+              <TwoDots />
+              <CounterBox number={dateTimeStamp?.seconds} legends="Sec" />
+            </div>
+            <div className="col-span-6 rounded-3xl bg-white shadow-lg flex justify-center items-center px-10 py-4 gap-5 mx-7">
+              <p className="text-2xl font-bold flex-1">
+                {randomCard.collection}
+              </p>
+            </div>
+            I
           </div>
-          <div className="col-span-6 rounded-3xl bg-white shadow-lg flex justify-center items-center px-10 py-4 gap-5 mx-7">
-            <Image
-              className="rounded-xl"
-              src="/placeholder.svg"
-              alt="profile picture"
-              width={50}
-              height={50}
-            />
-            <p className="text-2xl font-bold flex-1">John Doe</p>
-          </div>
         </div>
-      </div>
+      ) : null}
     </main>
   );
 }

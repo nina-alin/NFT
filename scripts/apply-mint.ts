@@ -8,7 +8,7 @@ async function main() {
       process.env.NEXT_PUBLIC_CONTRACT_ADDRESS
     );
 
-    await contract.multipleMint(10);
+    await contract.multipleMint();
     // } catch (error) {
     //   console.error(error);
   } catch (error) {

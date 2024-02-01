@@ -13,22 +13,23 @@ import { GiCrystalGrowth } from "react-icons/gi";
 import Graph from "./graph";
 import { Card } from "../types/card";
 import React, { useState } from "react";
-import { cardMock } from "../mocks/card.mock";
 
 type MainProps = {
   cardsIdsAndImages: { id: string; image: string }[];
   onSwipeCard: (id: string) => void;
   selectedCard: Card;
+  view: "home" | "my-cards";
 };
 
-const timer = (date: string) => {
-  const timeStampDate = new Date(date).getTime();
-  const now = new Date().getTime();
-  const difference = timeStampDate - now;
+export const timer = (date: string) => {
+  const dateAsDate = new Date(date);
+  const now = new Date();
 
-  const seconds = Math.floor((difference / 1000) % 60);
-  const minutes = Math.floor((difference / (1000 * 60)) % 60);
-  const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+  const difference = dateAsDate - now;
+
+  const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+  const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+  const hours = Math.floor(difference / (1000 * 60 * 60));
 
   return {
     seconds,
@@ -37,7 +38,12 @@ const timer = (date: string) => {
   };
 };
 
-const Main = ({ cardsIdsAndImages, onSwipeCard, selectedCard }: MainProps) => {
+const Main = ({
+  cardsIdsAndImages,
+  onSwipeCard,
+  selectedCard,
+  view,
+}: MainProps) => {
   const [dateTimeStamp, setDateTimeStamp] = useState<{
     hours: number;
     minutes: number;
@@ -45,8 +51,16 @@ const Main = ({ cardsIdsAndImages, onSwipeCard, selectedCard }: MainProps) => {
   } | null>(null);
 
   setTimeout(() => {
-    setDateTimeStamp(timer(cardMock[0].limitDate));
+    setDateTimeStamp(timer(selectedCard.closureDate));
   }, 1000);
+
+  const onBuy = () => {
+    console.log("buy");
+  };
+
+  const onSell = () => {
+    console.log("sell");
+  };
 
   return (
     <main className="mt-20">
@@ -54,9 +68,9 @@ const Main = ({ cardsIdsAndImages, onSwipeCard, selectedCard }: MainProps) => {
         <div className="flex flex-col">
           <h4 className="text-4xl font-bold">n°{selectedCard.cardNumber}</h4>
           <h2 className="text-8xl font-extrabold">{selectedCard.name}</h2>
-          <h6 className="text-2xl font-bold">{selectedCard.rarity} NFT</h6>
+          <p className="text-md font-medium">{selectedCard.description}</p>
         </div>
-        <div className="row-span-2 ml-24 xl:mb-0 mb-9">
+        <div className="row-span-2 ml-32 xl:mb-0 mb-9">
           <CardSwiper
             cardsIdsAndImages={cardsIdsAndImages}
             onSwipeCard={onSwipeCard}
@@ -71,13 +85,6 @@ const Main = ({ cardsIdsAndImages, onSwipeCard, selectedCard }: MainProps) => {
             <CounterBox number={dateTimeStamp?.seconds} legends="Sec" />
           </div>
           <div className="col-span-6 rounded-3xl bg-white shadow-lg flex justify-center items-center px-10 py-4 gap-5 mx-7">
-            {/* <Image
-              className="rounded-xl"
-              src={selectedCard.poster.avatar}
-              alt="profile picture"
-              width={50}
-              height={50}
-            /> */}
             <p className="text-2xl font-bold flex-1">
               {selectedCard.collection}
             </p>
@@ -118,7 +125,7 @@ const Main = ({ cardsIdsAndImages, onSwipeCard, selectedCard }: MainProps) => {
         <div className="bg-secondary rounded-3xl px-10 py-10 mx-7 flex flex-col gap-12 text-white justify-between">
           <p className="text-5xl font-bold">${selectedCard.price}</p>
           <button className="rounded-full bg-primary px-6 py-3 flex-1 font-bold text-2xl text-secondary hover:bg-primary-hover">
-            Buy Now
+            {view === "home" ? "Buy Now" : "Sell"}
           </button>
         </div>
       </div>

@@ -26,6 +26,8 @@ const HomePage = () => {
         const response: string = await contract?.getAllTokens();
         const cardsIds = response.toString().split(",");
 
+        console.log("cardsIds", response);
+
         // get all tokens data
         const cardsRes: Card[] = await Promise.all(
           cardsIds.map(async (cardId) => {
@@ -36,13 +38,13 @@ const HomePage = () => {
               }
             );
 
-            // try {
-            //   await response.json();
-            // } catch (e) {
-            //   console.log("Error", e, cardId);
-            // }
+            let data;
 
-            const data = await response.json();
+            try {
+              data = await response.json();
+            } catch (e) {
+              console.log("Error", e, cardId);
+            }
 
             // return card data with id
             return response.ok ? { ...data, id: cardId } : Promise.reject(data);
@@ -61,20 +63,8 @@ const HomePage = () => {
           }))
         );
 
-        console.log(
-          "cardsRes",
-          cardsRes.map((card) => ({
-            id: card.id,
-            image: `${process.env.NEXT_PUBLIC_IFPS_BASE_URL}/${card.image.slice(
-              7
-            )}`,
-          }))
-        );
-
         // set the first card as selected by default
         setSelectedCard(cardsRes[0]);
-
-        console.log("cardsRes", cardsRes[0]);
       } catch (e) {
         console.error("Error:", e);
       }
@@ -96,6 +86,7 @@ const HomePage = () => {
       cardsIdsAndImages={cardsIdsAndImages}
       selectedCard={selectedCard}
       onSwipeCard={onSwipeCard}
+      view="home"
     />
   );
 };

@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/home/nina-alin/HUB/IMT/M2/nft/contracts/Palamon.sol": {
-      "lastModificationDate": 1706795746127,
-      "contentHash": "b395bb99c373682e42b4405c3ec3ff02",
+      "lastModificationDate": 1706802112473,
+      "contentHash": "286546f3c0153f40c9452b3b3399406a",
       "sourceName": "contracts/Palamon.sol",
       "solcConfig": {
         "version": "0.8.20",
@@ -30,6 +30,7 @@
         }
       },
       "imports": [
+        "@openzeppelin/contracts/token/ERC721/IERC721.sol",
         "@openzeppelin/contracts/token/ERC721/ERC721.sol",
         "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
         "@openzeppelin/contracts/token/ERC721/extensions/ERC721Pausable.sol",
