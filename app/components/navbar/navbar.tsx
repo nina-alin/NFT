@@ -3,7 +3,7 @@
 import { MdHomeFilled } from "react-icons/md";
 import Link from "next/link";
 import LinkButtons from "./link-buttons";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useSDK } from "@metamask/sdk-react";
 import React, { useState } from "react";
 
@@ -15,7 +15,7 @@ const Navbar = () => {
 
   const connect = async () => {
     try {
-      const accounts = await sdk?.connect();
+      const accounts = (await sdk?.connect()) as string[];
       setAccount(accounts?.[0]);
     } catch (err) {
       console.warn(`failed to connect..`, err);
@@ -40,6 +40,7 @@ const Navbar = () => {
         <div className="flex gap-2">
           <LinkButtons to="/home">Home</LinkButtons>
           <LinkButtons to="/my-cards">My Cards</LinkButtons>
+          <LinkButtons to="/create">Create</LinkButtons>
         </div>
       ) : null}
       <div className="flex gap-4 text-2xl items-center">

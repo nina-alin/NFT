@@ -9,6 +9,8 @@ async function main() {
     );
 
     await contract.multipleMint(10);
+    // } catch (error) {
+    //   console.error(error);
   } catch (error) {
     console.error(error);
   }

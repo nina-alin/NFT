@@ -3,7 +3,6 @@
 import CounterBox from "./counter-box";
 import DetailsEntry from "./details-entry";
 import TwoDots from "./two-dots";
-import Image from "next/image";
 import CardSwiper from "./card-swiper";
 import { PiPlant } from "react-icons/pi";
 import { MdHeight } from "react-icons/md";
@@ -14,9 +13,10 @@ import { GiCrystalGrowth } from "react-icons/gi";
 import Graph from "./graph";
 import { Card } from "../types/card";
 import React, { useState } from "react";
+import { cardMock } from "../mocks/card.mock";
 
 type MainProps = {
-  cardsIdsAndImages: { id: number; image: string }[];
+  cardsIdsAndImages: { id: string; image: string }[];
   onSwipeCard: (id: string) => void;
   selectedCard: Card;
 };
@@ -45,18 +45,18 @@ const Main = ({ cardsIdsAndImages, onSwipeCard, selectedCard }: MainProps) => {
   } | null>(null);
 
   setTimeout(() => {
-    setDateTimeStamp(timer(selectedCard.limitDate));
+    setDateTimeStamp(timer(cardMock[0].limitDate));
   }, 1000);
 
   return (
     <main className="mt-20">
-      <div className="grid grid-rows-2 grid-cols-3">
+      <div className="grid grid-rows-2 grid-cols-1 xl:grid-cols-3 md:grid-cols-2">
         <div className="flex flex-col">
-          <h4 className="text-4xl font-bold">n°{selectedCard.number}</h4>
-          <h2 className="text-8xl font-extrabold">{selectedCard.title}</h2>
+          <h4 className="text-4xl font-bold">n°{selectedCard.cardNumber}</h4>
+          <h2 className="text-8xl font-extrabold">{selectedCard.name}</h2>
           <h6 className="text-2xl font-bold">{selectedCard.rarity} NFT</h6>
         </div>
-        <div className="row-span-2 ml-24">
+        <div className="row-span-2 ml-24 xl:mb-0 mb-9">
           <CardSwiper
             cardsIdsAndImages={cardsIdsAndImages}
             onSwipeCard={onSwipeCard}
@@ -71,15 +71,15 @@ const Main = ({ cardsIdsAndImages, onSwipeCard, selectedCard }: MainProps) => {
             <CounterBox number={dateTimeStamp?.seconds} legends="Sec" />
           </div>
           <div className="col-span-6 rounded-3xl bg-white shadow-lg flex justify-center items-center px-10 py-4 gap-5 mx-7">
-            <Image
+            {/* <Image
               className="rounded-xl"
               src={selectedCard.poster.avatar}
               alt="profile picture"
               width={50}
               height={50}
-            />
+            /> */}
             <p className="text-2xl font-bold flex-1">
-              {selectedCard.poster.name}
+              {selectedCard.collection}
             </p>
           </div>
         </div>
@@ -92,12 +92,12 @@ const Main = ({ cardsIdsAndImages, onSwipeCard, selectedCard }: MainProps) => {
           <DetailsEntry
             icon={<MdHeight />}
             label="Height"
-            value={`${selectedCard.height}cm`}
+            value={`${selectedCard.size}cm`}
           />
           <DetailsEntry
             icon={<LiaWeightSolid />}
             label="Weight"
-            value={`${selectedCard.height}kg`}
+            value={`${selectedCard.weight}kg`}
           />
           <DetailsEntry
             icon={<IoDiamondOutline />}
@@ -106,8 +106,8 @@ const Main = ({ cardsIdsAndImages, onSwipeCard, selectedCard }: MainProps) => {
           />
           <DetailsEntry
             icon={<MdCenterFocusWeak />}
-            label="Weaknesses"
-            value={selectedCard.weaknesses.join(", ")}
+            label="Weakness"
+            value={selectedCard.weakness}
           />
           <DetailsEntry
             icon={<GiCrystalGrowth />}
@@ -126,14 +126,14 @@ const Main = ({ cardsIdsAndImages, onSwipeCard, selectedCard }: MainProps) => {
         <div className="flex justify-between items-center">
           <div className="flex flex-col gap-2">
             <p className="text-5xl font-semibold">
-              ${selectedCard.price + selectedCard.transactionCost}
+              ${selectedCard.price - selectedCard.price * 0.01}
             </p>
             <p className="font-medium text-xl">
-              ${selectedCard.transactionCost} (23.55%)
+              ${selectedCard.price * 0.01} (1%)
             </p>
           </div>
         </div>
-        <Graph pastPrices={selectedCard.pastPrices} />
+        <Graph pastPrices={selectedCard.pastPrice} />
       </div>
     </main>
   );

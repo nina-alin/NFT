@@ -13,7 +13,7 @@ export default function Home() {
       <h1 className="text-7xl font-extrabold uppercase text-center tracking-wider">
         Collect & Sell
         <br />
-        Super rare Pokemon NFTS
+        Super rare Palamons NFTS
       </h1>
       <div className="flex justify-between items-center gap-36">
         <div className="flex flex-col gap-16 rounded-3xl bg-white shadow-lg p-9">

@@ -4,7 +4,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "assets.pokemon.com", // TODO; remove once test are done
+        hostname: "salmon-impressed-swan-813.mypinata.cloud",
       },
     ],
   },

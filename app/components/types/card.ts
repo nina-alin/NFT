@@ -1,5 +1,3 @@
-import { User } from "./user";
-
 export enum CardRarity {
   COMMON = "COMMON",
   UNCOMMON = "UNCOMMON",
@@ -9,21 +7,18 @@ export enum CardRarity {
 
 export type Card = {
   id: string;
-  title: string;
-  number: number;
-  rarity: CardRarity;
-  type: string;
-  weight: number;
-  weaknesses: string[];
-  height: number;
+  name: string;
+  cardNumber: number;
+  rarity: string;
+  attributes: string[];
+  description: string;
   evolution: string;
   image: string;
-  limitDate: string;
-  poster: User;
-  price: number;
-  transactionCost: number;
-  pastPrices: {
-    date: string;
-    price: number;
-  }[];
+  size: string;
+  type: string;
+  weakness: string;
+  weight: string;
+  collection: string;
+  pastPrice: Array<{ date: string; price: string }>;
+  price: string;
 };
